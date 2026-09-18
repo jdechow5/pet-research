@@ -99,6 +99,9 @@ summary { cursor: pointer; font-weight: 600; }
 code { font-size: .85em; background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; }
 .caveat { border-left: 3px solid var(--warn); padding-left: 14px; }
 .empty { color: var(--muted); font-style: italic; }
+.sample { border: 1px solid var(--bad); border-left-width: 4px; border-radius: 8px;
+  padding: 14px 16px; margin-bottom: 22px; background: var(--panel); }
+.sample strong { color: var(--bad); }
 .links a { display: inline-block; margin: 0 10px 6px 0; font-size: .88rem; }
 """
 
@@ -250,6 +253,18 @@ def render_html(run: ProtocolRun) -> str:
     )
     notes = "".join(f"<li>{_esc(n)}</li>" for n in run.notes) or "<li>none</li>"
 
+    banner = ""
+    if run.sample_data:
+        banner = (
+            '<div class="sample"><strong>Sample data, not real breeders.</strong> '
+            "This report was generated from the bundled test fixtures to show "
+            "the pipeline working. Every kennel, contact, credential and health "
+            "result below is invented, and the websites use the reserved "
+            "<code>.example</code> domain. Nothing here describes an actual "
+            "breeding program. Run <code>python3 -m doodle_scout run</code> "
+            "without <code>--selftest</code> for real results.</div>"
+        )
+
     return f"""<!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8">
@@ -259,6 +274,7 @@ def render_html(run: ProtocolRun) -> str:
 <style>{CSS}</style>
 </head><body><div class="wrap">
 
+{banner}
 <h1>Standard Australian Labradoodle breeder shortlist</h1>
 <p class="sub">Run {_esc(run.started_at)} &rarr; {_esc(run.finished_at)}.
 Every claim below links to the page it came from. Registry status changes, so
@@ -324,6 +340,7 @@ def write_outputs(run: ProtocolRun, out_dir: Path) -> dict[str, Path]:
             {
                 "started_at": run.started_at,
                 "finished_at": run.finished_at,
+                "sample_data": run.sample_data,
                 "funnel": run.funnel,
                 "shortlist": [to_jsonable(c) for c in run.shortlist],
                 "needs_confirmation": [to_jsonable(c) for c in run.needs_confirmation],

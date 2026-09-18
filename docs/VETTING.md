@@ -68,7 +68,7 @@ protocol that does not depend on a membership organization's word. Record the
 result:
 
 ```json
-{ "draycot meadows": { "ofa_verified": true, "notes": "OFA hips Good both parents, checked 9/18" } }
+{ "quillfeather labradoodles": { "ofa_verified": true, "notes": "OFA hips Good both parents, checked 9/18" } }
 ```
 
 in `data/manual/notes.json`, and the next run will score it.

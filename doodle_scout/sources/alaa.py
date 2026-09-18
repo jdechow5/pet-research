@@ -44,7 +44,7 @@ def detect_awards(block: Node, kennel: str) -> list[tuple[str, str]]:
       text_paw     - the word appeared next to "Paw"
       text_bare    - the word appeared alone; could be part of a kennel name
 
-    The distinction matters. "Silver Creek Labradoodles" contains the word
+    The distinction matters. "Silver Marsh Labradoodles" contains the word
     "Silver" and holds no Silver Paw, so bare text hits are reported but
     never treated as authoritative.
     """

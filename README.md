@@ -104,7 +104,7 @@ eye and cardiac clearances. Each shortlist card links the OFA searches for
 that kennel. Run them, then record what you found:
 
 ```json
-{ "draycot meadows": { "ofa_verified": true, "notes": "both parents OFA hips Good, 9/18" } }
+{ "quillfeather labradoodles": { "ofa_verified": true, "notes": "both parents OFA hips Good, 9/18" } }
 ```
 
 in `data/manual/notes.json`. It is weighted as heavily as the Platinum award

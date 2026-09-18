@@ -51,7 +51,7 @@ def dog_name_candidates(documents: list[tuple[str, str]]) -> list[str]:
     """Best-effort list of registered-looking dog names found on a site.
 
     Registered Australian Labradoodle names usually lead with the kennel
-    prefix, e.g. "Draycot Meadows Winter Song". This is a starting list for
+    prefix, e.g. "Quillfeather Winter Song". This is a starting list for
     the OFA lookups, not a verified roster.
     """
     import re

@@ -32,22 +32,22 @@ class TestProtocolEndToEnd(unittest.TestCase):
     def test_only_platinum_survives_stage_one(self):
         # The fixture has a Gold breeder and an unawarded breeder.
         names = {c.kennel for c in self.result.shortlist + self.result.near_misses}
-        self.assertNotIn("Golden Prairie Doodles", names)
+        self.assertNotIn("Goldenrod Meadow Doodles", names)
 
     def test_mini_and_medium_program_is_excluded_at_stage_three(self):
         excluded = {c.kennel: c for c in self.result.near_misses}
-        silver = excluded["Silver Creek Australian Labradoodles"]
+        silver = excluded["Silver Marsh Labradoodles"]
         self.assertEqual(silver.size.verdict.value, "standard_excluded")
         self.assertTrue(any("size assessment" in r for r in silver.exclusion_reasons))
 
     def test_platinum_without_a_wala_match_becomes_a_near_miss(self):
         near = {c.kennel for c in self.result.near_misses}
-        self.assertIn("EverHeart Labradoodles", near)
+        self.assertIn("Tamarack Bend Labradoodles", near)
 
     def test_shortlist_entry_is_fully_evidenced(self):
         self.assertEqual(len(self.result.shortlist), 1)
         candidate = self.result.shortlist[0]
-        self.assertEqual(candidate.kennel, "Draycot Meadows")
+        self.assertEqual(candidate.kennel, "Quillfeather Labradoodles")
         self.assertEqual(candidate.match.status, "matched")
         self.assertEqual(candidate.size.verdict.value, "standard_confirmed")
         self.assertTrue(candidate.size.evidence)
@@ -84,7 +84,7 @@ class TestProtocolEndToEnd(unittest.TestCase):
             written = write_outputs(self.result, Path(tmp))
             self.assertEqual(set(written), {"html", "json", "csv"})
             html = written["html"].read_text()
-            self.assertIn("Draycot Meadows", html)
+            self.assertIn("Quillfeather Labradoodles", html)
             self.assertNotIn("<script", html.lower())
             self.assertNotIn("http://localhost", html)
             payload = json.loads(written["json"].read_text())
@@ -131,9 +131,9 @@ class TestManualOverlay(unittest.TestCase):
         overlay = self._load(
             '{"_about": "a note, not a kennel",'
             ' "oops": 7,'
-            ' "Draycot Meadows": {"ofa_verified": true}}'
+            ' "Quillfeather Labradoodles": {"ofa_verified": true}}'
         )
-        self.assertEqual(overlay, {"draycot meadows": {"ofa_verified": True}})
+        self.assertEqual(overlay, {"quillfeather labradoodles": {"ofa_verified": True}})
 
     def test_malformed_json_does_not_stop_a_run(self):
         self.assertEqual(self._load("{not json"), {})
@@ -159,7 +159,38 @@ class TestManualOverlay(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "notes.json"
-            path.write_text('{"draycot meadows": {"exclude": true}}')
+            path.write_text('{"quillfeather labradoodles": {"exclude": true}}')
             result = run(FixtureClient(), Config.load(), manual_path=path)
         self.assertEqual(result.shortlist, [])
         self.assertTrue(any("excluded 1 kennel" in n for n in result.notes))
+
+
+class TestSampleDataIsLabelled(unittest.TestCase):
+    """A fixture run must never be mistakable for real findings."""
+
+    def test_banner_appears_only_when_flagged(self):
+        from doodle_scout.config import Config
+        from doodle_scout.protocol import run
+        from doodle_scout.testing import FixtureClient
+
+        flagged = render_html(
+            run(FixtureClient(), Config.load(), read_sites=False, sample_data=True)
+        )
+        self.assertIn("Sample data, not real breeders", flagged)
+
+        unflagged = render_html(
+            run(FixtureClient(), Config.load(), read_sites=False)
+        )
+        self.assertNotIn("Sample data, not real breeders", unflagged)
+
+    def test_fixtures_use_only_reserved_example_domains(self):
+        from pathlib import Path as _Path
+        import re as _re
+
+        fixtures = _Path(__file__).parent / "fixtures"
+        hosts = set()
+        for path in fixtures.rglob("*.html"):
+            for match in _re.finditer(r"https?://([\w.-]+)", path.read_text()):
+                hosts.add(match.group(1).lower())
+        offenders = [h for h in hosts if not h.endswith(".example")]
+        self.assertEqual(offenders, [], f"non-.example hosts in fixtures: {offenders}")

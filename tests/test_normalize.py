@@ -6,23 +6,23 @@ from doodle_scout import normalize as n
 class TestNormalize(unittest.TestCase):
     def test_same_kennel_variants_score_high(self):
         for left, right in (
-            ("Draycot Meadows", "Draycot Meadows Australian Labradoodles, LLC"),
-            ("Red Desert Doodles", "Red Desert Labradoodles"),
-            ("Heart Rock Labradoodles", "Heartrock Australian Labradoodles"),
-            ("Cardinal's Crossing Australian Labradoodles", "Cardinals Crossing"),
+            ("Quillfeather Labradoodles", "Quillfeather Australian Labradoodles, LLC"),
+            ("Ondwood Doodles", "Ondwood Labradoodles"),
+            ("Harrow Gate Labradoodles", "Harrowgate Australian Labradoodles"),
+            ("Pemberly's Crossing Australian Labradoodles", "Pemberlys Crossing"),
         ):
             self.assertGreaterEqual(n.name_similarity(left, right), 0.90, (left, right))
 
     def test_different_kennels_score_low(self):
         for left, right in (
-            ("Willow Creek Labradoodles", "Willow Ridge Labradoodles"),
-            ("Long Bay Labradoodles", "Sea Spray Australian Labradoodles"),
+            ("Tamarack Bend Labradoodles", "Tamarack Ridge Labradoodles"),
+            ("Ondwood Labradoodles", "Silver Marsh Australian Labradoodles"),
         ):
             self.assertLess(n.name_similarity(left, right), 0.72, (left, right))
 
     def test_single_shared_token_stays_in_review_band(self):
         # "Willow" alone must not auto-join to "Willow Creek".
-        score = n.name_similarity("Willow Labradoodles", "Willow Creek Labradoodles")
+        score = n.name_similarity("Tamarack Labradoodles", "Tamarack Bend Labradoodles")
         self.assertTrue(0.72 <= score < 0.90, score)
 
     def test_registrable_domain(self):

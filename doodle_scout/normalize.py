@@ -1,8 +1,8 @@
 """Normalization helpers for joining two registries that share no key.
 
 ALAA and WALA maintain independent member lists with independent IDs. To
-cross-filter one against the other we have to decide when "Draycot Meadows"
-and "Draycot Meadows Australian Labradoodles, LLC" are the same kennel, and
+cross-filter one against the other we have to decide when "Quillfeather"
+and "Quillfeather Australian Labradoodles, LLC" are the same kennel, and
 when "Willow Creek" (OR) and "Willow Creek" (VA) are not.
 """
 
@@ -192,7 +192,7 @@ def name_similarity(left: str, right: str) -> float:
         return 0.0
 
     joined_left, joined_right = "".join(left_core), "".join(right_core)
-    # "Heart Rock" and "Heartrock" are the same kennel spelled two ways.
+    # "Harrow Gate" and "Harrowgate" are the same kennel spelled two ways.
     # Token overlap scores that at zero, so check the concatenation first.
     if joined_left == joined_right:
         return 1.0
@@ -201,7 +201,7 @@ def name_similarity(left: str, right: str) -> float:
     char_score = difflib.SequenceMatcher(None, joined_left, joined_right).ratio()
     blended = 0.6 * token_score + 0.4 * char_score
 
-    # Full containment ("Draycot Meadows" inside "Draycot Meadows Australian
+    # Full containment ("Quillfeather" inside "Quillfeather Australian
     # Labradoodles") is strong evidence that token Jaccard under-credits,
     # because the extra tokens are the generic ones.
     if set(left_core) <= set(right_core) or set(right_core) <= set(left_core):

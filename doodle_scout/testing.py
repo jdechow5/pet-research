@@ -1,5 +1,9 @@
 """A fixture-backed stand-in for HttpClient.
 
+The fixtures contain invented kennels on reserved .example domains. No real
+breeder, person or registry id appears in them, so a report generated from
+them cannot be mistaken for a statement about an actual breeder.
+
 Lets the whole protocol run end to end with no network, which is how the
 joining, filtering, scoring and reporting logic is actually tested. It does
 not, and cannot, prove that the live registry markup matches the fixtures.
@@ -18,10 +22,10 @@ ROUTES: list[tuple[str, str]] = [
     ("breedersearch", "alaa_listing.html"),
     ("all-star-breeders", "wala_allstar.html"),
     ("diamond-rewards-program", "wala_diamond.html"),
-    ("draycotmeadows.com/about", "sites/draycotmeadows_about.html"),
-    ("draycotmeadows.com/our-dogs", "sites/draycotmeadows_dogs.html"),
-    ("draycotmeadows.com", "sites/draycotmeadows.html"),
-    ("silvercreekald.com", "sites/silvercreekald.html"),
+    ("quillfeather.example/about", "sites/quillfeather_about.html"),
+    ("quillfeather.example/our-dogs", "sites/quillfeather_dogs.html"),
+    ("quillfeather.example", "sites/quillfeather.html"),
+    ("silvermarsh.example", "sites/silvermarsh.html"),
 ]
 
 

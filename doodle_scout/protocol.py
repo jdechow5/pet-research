@@ -45,6 +45,7 @@ class ProtocolRun:
     needs_confirmation: list[Candidate] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
     config_snapshot: dict = field(default_factory=dict)
+    sample_data: bool = False
 
     def stage(self, name: str, description: str, count: int, detail: str = "") -> None:
         self.funnel.append(
@@ -61,7 +62,7 @@ def load_manual_overlay(path: Path) -> dict:
     """User-maintained facts the tool cannot establish on its own.
 
     Keyed by lowercased kennel name, e.g.
-      {"draycot meadows": {"ofa_verified": true, "notes": "spoke 9/14"}}
+      {"quillfeather labradoodles": {"ofa_verified": true, "notes": "spoke 9/14"}}
     """
     if not path.exists():
         return {}
@@ -100,8 +101,9 @@ def run(
     read_sites: bool = True,
     regions: list[str] | None = None,
     site_page_budget: int = 7,
+    sample_data: bool = False,
 ) -> ProtocolRun:
-    run_result = ProtocolRun(config_snapshot=config.raw)
+    run_result = ProtocolRun(config_snapshot=config.raw, sample_data=sample_data)
     manual = load_manual_overlay(manual_path) if manual_path else {}
 
     # ---- Stage 1: ALAA, filtered to Platinum --------------------------

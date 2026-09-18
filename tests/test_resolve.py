@@ -23,17 +23,17 @@ class TestResolve(unittest.TestCase):
 
     def test_shared_domain_is_conclusive_even_with_different_names(self):
         score, basis = score_pair(
-            alaa("Draycot Meadows", "MA", "draycotmeadows.com"),
-            wala("DM Australian Labradoodles", "MA", "draycotmeadows.com"),
+            alaa("Quillfeather Labradoodles", "MA", "quillfeather.example"),
+            wala("DM Australian Labradoodles", "MA", "quillfeather.example"),
             self.config,
         )
         self.assertEqual(score, 1.0)
-        self.assertIn("same website domain (draycotmeadows.com)", basis)
+        self.assertIn("same website domain (quillfeather.example)", basis)
 
     def test_shared_phone_is_near_conclusive(self):
         score, basis = score_pair(
-            alaa("Cascade Summit", "OR", phone="(503) 555-0142"),
-            wala("Cascade Summit ALDs", "OR", phone="503.555.0142"),
+            alaa("Pemberly Downs", "OR", phone="(503) 555-0142"),
+            wala("Pemberly Downs ALDs", "OR", phone="503.555.0142"),
             self.config,
         )
         self.assertGreaterEqual(score, 0.95)
@@ -41,41 +41,41 @@ class TestResolve(unittest.TestCase):
 
     def test_state_disagreement_is_penalised(self):
         score, basis = score_pair(
-            alaa("Willow Creek Labradoodles", "OR"),
-            wala("Willow Creek Labradoodles", "VA"),
+            alaa("Tamarack Bend Labradoodles", "OR"),
+            wala("Tamarack Bend Labradoodles", "VA"),
             self.config,
         )
         self.assertLess(score, 0.72)
         self.assertTrue(any("state disagrees" in b for b in basis))
 
     def test_name_only_match_without_state_needs_confirmation(self):
-        result = resolve([alaa("Hastings Hollow Labradoodles")],
-                         [wala("Hastings Hollow Labradoodles")],
+        result = resolve([alaa("Harrowgate Fen Labradoodles")],
+                         [wala("Harrowgate Fen Labradoodles")],
                          self.config)
         self.assertEqual(len(result.pairs), 1)
         self.assertEqual(result.pairs[0][2].status, "review")
         self.assertEqual(result.matched, [])
 
     def test_name_and_state_match_is_accepted(self):
-        result = resolve([alaa("Hastings Hollow Labradoodles", "MN")],
-                         [wala("Hastings Hollow Australian Labradoodles", "MN")],
+        result = resolve([alaa("Harrowgate Fen Labradoodles", "MN")],
+                         [wala("Harrowgate Fen Australian Labradoodles", "MN")],
                          self.config)
         self.assertEqual(result.pairs[0][2].status, "matched")
 
     def test_unrelated_kennels_do_not_join(self):
-        result = resolve([alaa("Long Bay Labradoodles", "CA")],
-                         [wala("Sea Spray Australian Labradoodles", "CA")],
+        result = resolve([alaa("Ondwood Labradoodles", "CA")],
+                         [wala("Silver Marsh Australian Labradoodles", "CA")],
                          self.config)
         self.assertEqual(result.pairs, [])
         self.assertEqual(len(result.alaa_only), 1)
         self.assertEqual(len(result.wala_only), 1)
 
     def test_two_wala_records_cannot_both_claim_one_alaa_record(self):
-        target = alaa("Willow Creek Labradoodles", "OR", "willowcreekald.com")
+        target = alaa("Tamarack Bend Labradoodles", "OR", "tamarackbend.example")
         result = resolve(
             [target],
-            [wala("Willow Creek Labradoodles", "OR", "willowcreekald.com"),
-             wala("Willow Creek Australian Labradoodles", "OR")],
+            [wala("Tamarack Bend Labradoodles", "OR", "tamarackbend.example"),
+             wala("Tamarack Bend Australian Labradoodles", "OR")],
             self.config,
         )
         statuses = sorted(info.status for _, _, info in result.pairs)
@@ -86,9 +86,9 @@ class TestResolve(unittest.TestCase):
 
     def test_runners_up_are_recorded(self):
         result = resolve(
-            [alaa("Cascade Summit Labradoodles", "OR"),
-             alaa("Cascade Summit Doodles", "OR")],
-            [wala("Cascade Summit Australian Labradoodles", "OR")],
+            [alaa("Pemberly Downs Labradoodles", "OR"),
+             alaa("Pemberly Downs Doodles", "OR")],
+            [wala("Pemberly Downs Australian Labradoodles", "OR")],
             self.config,
         )
         self.assertTrue(result.pairs[0][2].runners_up)

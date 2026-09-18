@@ -52,6 +52,7 @@ def cmd_run(args) -> int:
         read_sites=not args.no_sites,
         regions=[r.strip().upper() for r in args.regions.split(",")] if args.regions else None,
         site_page_budget=args.site_pages,
+        sample_data=args.selftest,
     )
 
     print("Funnel")

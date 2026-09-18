@@ -8,7 +8,7 @@ being valid on member websites after April 2026. So a current search
 should key on Diamond level, and treat "All Star" as a legacy signal that
 a breeder cleared a high bar at some point before the changeover.
 
-Parsing strategy: WALA publishes a member id in the form WALA-0619-00755.
+Parsing strategy: WALA publishes a member id in the form WALA-0101-00002.
 That pattern is a reliable record delimiter regardless of whether the page
 is laid out as a table or as stacked Wix text blocks.
 """
