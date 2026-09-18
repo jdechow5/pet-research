@@ -1,0 +1,136 @@
+{
+  "_about": "Edit this file to change the protocol. doodle_scout reads it at startup; nothing is hardcoded in the scrapers.",
+  "protocol": {
+    "stage_1_alaa": {
+      "_note": "ALAA Paw Reward Program. Platinum is a HEALTH-TESTING award (hip/elbow depth), not a general breeder tier. See docs/PROTOCOL.md.",
+      "enabled": true,
+      "accepted_awards": [
+        "Platinum"
+      ],
+      "require_current_member": true
+    },
+    "stage_2_wala": {
+      "_note": "WALA retired the Star Rewards Program (which contained 'All Star') and replaced it with the Diamond Rewards Program. Star badges expired April 2026. 'All Star' is kept below as a LEGACY signal only.",
+      "enabled": true,
+      "accepted_ratings": [
+        "Three Diamond",
+        "Two Diamond",
+        "One Diamond"
+      ],
+      "legacy_ratings": [
+        "All Star"
+      ],
+      "accept_legacy_as_pass": true,
+      "require_membership_if_no_rating": false
+    },
+    "stage_3_size": {
+      "enabled": true,
+      "target_sizes": [
+        "Standard"
+      ],
+      "keep_unknown_for_review": true,
+      "exclude_verdicts": [
+        "standard_excluded"
+      ]
+    }
+  },
+  "breed_standard": {
+    "_note": "ALAA breed standard, height at wither.",
+    "miniature": {
+      "min_in": 14,
+      "max_in": 17,
+      "weight_lb": [
+        15,
+        30
+      ]
+    },
+    "medium": {
+      "min_in": 17,
+      "max_in": 21,
+      "weight_lb": [
+        30,
+        45
+      ]
+    },
+    "standard": {
+      "min_in": 21,
+      "max_in": 24,
+      "weight_lb": [
+        50,
+        65
+      ]
+    }
+  },
+  "matching": {
+    "_note": "Cross-registry joins. Above auto_accept the tool asserts a match; between review_floor and auto_accept it asks you to confirm; below review_floor it does not join.",
+    "auto_accept": 0.9,
+    "review_floor": 0.72,
+    "require_region_agreement": true,
+    "region_mismatch_penalty": 0.35
+  },
+  "home": {
+    "city": "Portland",
+    "region": "OR",
+    "_note": "Used for travel banding only. Visiting the litter in person is the single most informative vetting step, so distance is scored, not filtered."
+  },
+  "scoring": {
+    "_note": "Weights over VERIFIABLE signals only. Nothing here scores appearance; see docs/PROTOCOL.md on why.",
+    "weights": {
+      "alaa_platinum": 3.0,
+      "wala_diamond": 3.0,
+      "dual_accountability": 2.0,
+      "ofa_verified": 3.0,
+      "standard_size": 2.5,
+      "raised_in_home": 2.0,
+      "early_development_curriculum": 2.0,
+      "temperament_testing": 1.5,
+      "breeding_dog_transparency": 1.5,
+      "health_guarantee": 1.0,
+      "litter_cadence_disclosed": 1.0,
+      "travel_band": 1.0
+    }
+  },
+  "http": {
+    "user_agent": "doodle-scout/0.1 (personal breeder research; contact via the address on the request)",
+    "min_seconds_between_requests": 2.0,
+    "timeout_seconds": 30,
+    "max_retries": 3,
+    "cache_ttl_hours": 12,
+    "respect_robots_txt": true
+  },
+  "sources": {
+    "alaa_base_urls": [
+      "https://ilainc.net",
+      "https://breeders.alaa-labradoodles.com"
+    ],
+    "alaa_search_path": "/guest/breedersearch.aspx",
+    "alaa_detail_path": "/Guest/BreederDetails.aspx",
+    "wala_base_url": "https://www.walalabradoodles.org",
+    "ofa_search_url": "https://ofa.org/advanced-search/",
+    "wala_pages": [
+      {
+        "path": "/about-wala/diamond-rewards-program",
+        "rating": "Diamond (level shown on page)",
+        "kind": "rating"
+      },
+      {
+        "path": "/walabreeder-1/all-star-breeders-of-labradoodles",
+        "rating": "All Star",
+        "kind": "legacy_rating"
+      },
+      {
+        "path": "/for-australian-labradoodle-enthusiasts/find-an-australian-labradoodle-breeder/united-states",
+        "rating": "",
+        "kind": "membership"
+      }
+    ],
+    "wala_discover_rating_pages": true
+  },
+  "scope": {
+    "countries": [
+      "US"
+    ],
+    "regions": [],
+    "_note": "Empty regions means all 50 states plus DC (a national search, per the protocol)."
+  }
+}

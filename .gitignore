@@ -1,0 +1,10 @@
+# Working data. Cached pages and generated reports are not source.
+data/cache/
+data/raw/
+data/manual/
+out/
+
+__pycache__/
+*.py[cod]
+.DS_Store
+.venv/
